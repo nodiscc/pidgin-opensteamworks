@@ -30,3 +30,12 @@ package-debian-buster:
     paths:
       - ./*.deb
 
+publish-release:
+  script: echo "publising release $CI_COMMIT_TAG"
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  stage: release
+  release:
+    tag_name: $CI_COMMIT_TAG
+    description: "$CI_COMMIT_TAG"
+  only:
+    - tags
