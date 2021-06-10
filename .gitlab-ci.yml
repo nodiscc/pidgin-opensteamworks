@@ -1,6 +1,7 @@
 stages:
  - package
  - release
+ - upload
 
 package-debian-stretch:
   image: debian:stretch
@@ -41,3 +42,12 @@ publish-release:
     description: "$CI_COMMIT_TAG"
   only:
     - tags
+
+upload_packages:
+  stage: upload
+  image: curlimages/curl:latest
+  only:
+    - tags
+  script:
+    - "curl --header 'JOB-TOKEN: ${CI_JOB_TOKEN}' --upload-file pidgin-opensteamworks_${CI_COMMIT_TAG}-stretch0_amd64.deb ${PACKAGE_REGISTRY_URL}/pidgin-opensteamworks_${CI_COMMIT_TAG}-stretch0_amd64.deb"
+    - "curl --header 'JOB-TOKEN: ${CI_JOB_TOKEN}' --upload-file pidgin-opensteamworks_${CI_COMMIT_TAG}-buster0_amd64.deb ${PACKAGE_REGISTRY_URL}/pidgin-opensteamworks_${CI_COMMIT_TAG}-buster0_amd64.deb"
